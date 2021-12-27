@@ -1,0 +1,11 @@
+<app-header [isInRecipe]="inRecipe" (clickedOnOther)="changeContent()"></app-header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <app-recipes *ngIf="inRecipe; else shopping"></app-recipes>
+      <ng-template #shopping>
+        <app-shopping-list></app-shopping-list>
+      </ng-template>
+    </div>
+  </div>
+</div>

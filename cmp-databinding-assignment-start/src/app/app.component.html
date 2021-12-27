@@ -1,0 +1,18 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <app-game-control (myGame)="addNewComponenet($event)"></app-game-control>
+      <h1>{{totalNumber.length}}</h1>
+
+      <ul>
+        <li *ngFor="let currNo of totalNumber">
+          <app-odd *ngIf="currNo%2===1;else even" [oddNo]="currNo"></app-odd>
+          <ng-template #even>
+            <app-even [evenNo]="currNo"></app-even>
+          </ng-template>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+

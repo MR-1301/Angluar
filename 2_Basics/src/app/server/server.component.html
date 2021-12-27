@@ -1,0 +1,13 @@
+<!--String Interpolation!!-->
+
+<!--any expression with will give a string resultant can be used inside string interpolation-->
+<!--ngStyle is attribute directive which changes the style attribute value of the element-->
+<!--ngStyles takes up js object to decide property and values of that property for that element-->
+<!--ngClass allow us to dynamically add or remove css classes-->
+<!--ngClass takes up JS object. Key is Classname and value is true/false to decide weather this class has to be attached or no-->
+<p
+  [ngStyle]="{backgroundColor:getColor()}"
+  [ngClass]="{online:getServerStatus()==='online'}"
+>
+  {{'Server'}} with ID {{serverId}} is {{getServerStatus()}}
+</p>

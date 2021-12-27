@@ -1,0 +1,26 @@
+<script src="app.module.ts"></script>
+<div class="container">
+  <!--  done event binding on custom created events-->
+  <app-cockpit (serverCreated)="onServerAdded($event)" (bpCreated)="onBlueprintAdded($event)"></app-cockpit>
+  <button class="btn btn-warning" (click)="onChangeFirst()">Change First Element</button>
+  <button class="btn btn-danger" (click)="onDestroyFirst()">Destroy First Element</button>
+  <hr>
+
+  <!--        this [srvElement] is an alais used for property element and sets element=serverElement through prop binding-->
+  <div class="row">
+    <div class="col-xs-12">
+      <app-element
+        *ngFor="let serverElement of serverElements;"
+        [srvElement]="serverElement"
+        [name]="serverElement.name"
+      >
+        <!--        by default all the content between the app-element will not be loaded but ng-content helps to achieve that-->
+        <!--        this will end up in place of ng-content-->
+        <p #contentParagraph>
+          <strong *ngIf="serverElement.type === 'server'" style="color: red">{{ serverElement.content }}</strong>
+          <em *ngIf="serverElement.type === 'blueprint'">{{ serverElement.content }}</em>
+        </p>
+      </app-element>
+    </div>
+  </div>
+</div>

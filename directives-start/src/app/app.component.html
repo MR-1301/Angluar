@@ -1,0 +1,70 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <button
+        class="btn btn-primary"
+        (click)="onlyOdd = !onlyOdd">Only show odd numbers
+      </button>
+      <br><br>
+      <ul class="list-group">
+        <!--        can't add two structural directives on one element-->
+        <div *ngIf="onlyOdd">
+          <li
+            class="list-group-item"
+            *ngFor="let number of newOddArray()"
+            [ngClass]="{odd: onlyOdd}"
+            [ngStyle]="{backgroundColor:onlyOdd?'yellow':'transparent'}"
+          >
+            {{number}}
+          </li>
+        </div>
+        <!--        <div *ngIf="!onlyOdd">-->
+        <!--          <li-->
+        <!--            class="list-group-item"-->
+        <!--            *ngFor="let number of newEvenArray()"-->
+        <!--            [ngClass]="{odd: onlyOdd}"-->
+        <!--            [ngStyle]="{backgroundColor:onlyOdd?'yellow':'transparent'}"-->
+        <!--          >-->
+        <!--            {{number}}-->
+        <!--          </li>-->
+        <!--        </div>-->
+
+        <!--        &lt;!&ndash;        BTS of *, it gets transformed into prop binding&ndash;&gt;-->
+        <!--        <ng-template [ngIf]="!onlyOdd">-->
+        <!--          <li-->
+        <!--            class="list-group-item"-->
+        <!--            *ngFor="let number of newEvenArray()"-->
+        <!--            [ngClass]="{odd: onlyOdd}"-->
+        <!--            [ngStyle]="{backgroundColor:onlyOdd?'yellow':'transparent'}"-->
+        <!--          >-->
+        <!--            {{number}}-->
+        <!--          </li>-->
+        <!--        </ng-template>-->
+
+        <div *appUnless="onlyOdd">
+          <li
+            class="list-group-item"
+            *ngFor="let number of newEvenArray()"
+            [ngClass]="{odd: onlyOdd}"
+            [ngStyle]="{backgroundColor:onlyOdd?'yellow':'transparent'}"
+          >
+            {{number}}
+          </li>
+        </div>
+
+      </ul>
+      <ng-template [ngIf]="onlyOdd">
+        <p>Only odd</p>
+      </ng-template>
+      <p appBasicHighlight>Basic Highlight</p>
+      <p appBetterHighlight [defaultColor]="'yellow'" [highlightColor]="'red'">Basic Highlight</p>
+
+      <div [ngSwitch]="value">
+        <p *ngSwitchCase="5">Value is 5</p>
+        <p *ngSwitchCase="10">Value is 10</p>
+        <p *ngSwitchCase="100">Value is 100</p>
+        <p *ngSwitchDefault>Value is Default</p>
+      </div>
+    </div>
+  </div>
+</div>

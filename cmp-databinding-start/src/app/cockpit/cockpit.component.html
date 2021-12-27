@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col-xs-12">
+    <p>Add new Servers or blueprints!</p>
+    <label>Server Name</label>
+    <!--    we can use reference to the element to extract data when we click the button -->
+    <!-- # defines the reference to this  input element and can be used anywhere inside this template -->
+    <!--    <input type="text" class="form-control" [(ngModel)]="newServerName">-->
+    <input type="text" class="form-control" #serveNameInput>
+    <label>Server Content</label>
+    <!--    <input type="text" class="form-control" [(ngModel)]="newServerContent">-->
+    <input type="text" class="form-control" #serverContentInput>
+
+    <br>
+
+    <button
+      class="btn btn-primary"
+      (click)="onAddServer(serveNameInput)">Add Server
+    </button>
+    <button
+      class="btn btn-primary"
+      (click)="onAddBlueprint(serveNameInput)">Add Server Blueprint
+    </button>
+  </div>
+</div>

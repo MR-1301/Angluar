@@ -1,0 +1,39 @@
+<!--Prop Binding Vs String Interpolation-->
+<!--<p>{{allowNewServer}}</p>-->
+<!--<p [innerText]="allowNewServer"></p>-->
+
+<!--note in between the {{---}} and []="---" you have to write type script code-->
+<!-- in case of {{}} that typescript must get evaluated to string -->
+<!-- while in case of prop it must return some value which makes sense to that attribute -->
+
+<!--Event Binding-->
+<!--property binding changing property using the variable as a value of attribute-->
+
+<!--Event Binding is executing some code when particular event occurs -->
+<!--() is a way to use event binding&ndash -->
+<!--we can pass on $event to get all the information about that event -->
+
+<!--<label for="sn">Server Name</label>-->
+<!--<input type="text" name="sn" id="sn" class="form-control" (input)="onUpdateServerName($event)">-->
+<!--<p>{{serverName}}</p>-->
+<!--<button class="btn btn-success" [disabled]="!allowNewServer" (click)="onServerCreation()">Add Server</button>-->
+<!--<p>{{serverCreationStatus}}</p>-->
+
+
+<!--Two way data binding-->
+<!--the change in value will lead to change in input field and change in input field will lead to change in stored value-->
+<label for="sn">Server Name</label>
+<input type="text" name="sn" id="sn" class="form-control" [(ngModel)]="serverName">
+<p>{{serverName}}</p>
+<button class="btn btn-success" [disabled]="!allowNewServer" (click)="onServerCreation()">Add Server</button>
+<!--<p>{{serverCreationStatus}}</p>-->
+
+<!--We will use directives to show this text conditionally when we click button-->
+<!--* is used because ngIf is structural directive i.e. can add or remove element-->
+<!--takes ts condition which return true/false-->
+<p *ngIf="serverCreated; else noServer">Server was created and Server Name is {{displayServerName}}</p>
+<!--adding else part-->
+<ng-template #noServer><p>No Server was created!!</p></ng-template>
+
+<app-server *ngFor="let curr of servers"></app-server>
+
