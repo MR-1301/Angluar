@@ -6,10 +6,4 @@ import {Component} from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  inRecipe: boolean = true;
-
-  changeContent() {
-    console.log("LOLLLLLLLLLLL!")
-    this.inRecipe = !this.inRecipe;
-  }
 }

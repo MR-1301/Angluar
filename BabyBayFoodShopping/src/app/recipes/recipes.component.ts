@@ -10,9 +10,11 @@ export class RecipesComponent implements OnInit {
   recipeDetail: Recipe;
 
   constructor() {
+
   }
 
   ngOnInit(): void {
+
   }
 
   changeShowedRecipe(showedRecipe: Recipe) {

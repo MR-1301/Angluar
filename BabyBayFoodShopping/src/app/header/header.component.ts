@@ -1,49 +1,28 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
-  styles: [`.inThatSection {
-    background: dimgrey;
-  }`],
   encapsulation: ViewEncapsulation.None
 
 })
 export class HeaderComponent implements OnInit {
-  @Input('isInRecipe') inRecipes: boolean = true;
-
-  @Output() clickedOnOther = new EventEmitter<{}>()
-
-  constructor() {
+  constructor(private router: Router, private route: ActivatedRoute) {
   }
 
-  ngOnInit()
-    :
-    void {
+  ngOnInit(): void {
   }
 
   collapsed = true;
 
   recipeClicked() {
-    if (!this.inRecipes) {
-      this.clickedOnOther.emit();
-    }
+    this.router.navigate(['recipes'], {relativeTo: this.route})
   }
 
   shoppingClicked() {
-    if (this.inRecipes) {
-      this.clickedOnOther.emit();
-    }
+    this.router.navigate(['shopping-list'], {relativeTo: this.route})
   }
 
-  getColorRecipe() {
-    if (this.inRecipes)
-      return 'black';
-  }
-
-  getColorShop() {
-    if (!this.inRecipes)
-      return 'black';
-  }
 }

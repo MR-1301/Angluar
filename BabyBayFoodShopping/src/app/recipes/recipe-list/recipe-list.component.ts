@@ -1,26 +1,30 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {Recipe} from "../recipe.model";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Recipe } from '../recipe.model';
+import { RecipeService } from '../recipe.service';
+import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-recipe-list',
   templateUrl: './recipe-list.component.html',
-  styleUrls: ['./recipe-list.component.css']
+  styleUrls: ['./recipe-list.component.css'],
 })
-export class RecipeListComponent implements OnInit {
-  recipes: Recipe[] = [
-    new Recipe('Test1', 'dgauyhdgadjhad', 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8M3x8fGVufDB8fHx8&w=1000&q=80'),
-    new Recipe('Test2', 'dgauyhdgadjhad', 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8M3x8fGVufDB8fHx8&w=1000&q=80'),
-  ];
+export class RecipeListComponent implements OnInit, OnDestroy {
+  recipes: Recipe[];
+  subscription: Subscription;
 
-  @Output() changeRecipeDetail = new EventEmitter<Recipe>();
-
-  constructor() {
-  }
+  constructor(private recipeService: RecipeService) {}
 
   ngOnInit(): void {
+    this.recipes = this.recipeService.getRecipes();
+    this.subscription = this.recipeService.recipesChanged.subscribe(
+      (newRecipes) => {
+        this.recipes = newRecipes;
+      }
+    );
   }
 
-  changeShowedRecipe(showRecipe: Recipe) {
-    this.changeRecipeDetail.emit(showRecipe);
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

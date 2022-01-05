@@ -1,23 +1,53 @@
 <div class="row">
   <div class="col-xs-12">
-    <form>
+    <form (ngSubmit)="onSubmit()" #addIngForm="ngForm">
       <div class="row">
         <div class="col-sm-5 form-group">
           <label for="name">Name</label>
-          <input type="text" name="name" id="name" class="form-control" #ingredientName>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            class="form-control"
+            ngModel
+            #ingredientName="ngModel"
+            required
+          >
+          <span class="help-block" *ngIf="ingredientName.invalid && ingredientName.touched">Name can't be Empty!</span>
         </div>
-        <div class="col-sm-2 form-group">
+        <div class="col-sm-3 form-group">
           <label for="amount">Amount</label>
-          <input type="number" name="amount" id="amount" class="form-control" #ingredientAmount>
+          <input
+            type="number"
+            name="amount"
+            id="amount"
+            class="form-control"
+            ngModel
+            #ingredientAmount="ngModel"
+            pattern="^[1-9]+[0-9]*$"
+            required
+          >
+          <span class="help-block"
+                *ngIf="ingredientAmount.invalid && ingredientAmount.touched">
+            <span *ngIf="ingredientAmount.errors['pattern'];else empty">Amount must be > 0 !</span>
+            <ng-template #empty><span>Amount can't be Empty!</span></ng-template>
+          </span>
         </div>
       </div>
       <div class="row">
         <div class="col-xs-12">
-          <button class="btn btn-success" style="margin-right:5px" type="submit"
-                  (click)="addIngredient(ingredientName)">Add
+          <button [disabled]="addIngForm.invalid" class="btn btn-success" style="margin-right:5px" type="submit">
+            <div *ngIf="!isInEdit()">Add</div>
+            <div *ngIf="isInEdit()">Edit</div>
           </button>
-          <button class="btn btn-danger" style="margin-right:5px" type="button">Delete</button>
-          <button class="btn btn-primary" type="button">Clear</button>
+          <button *ngIf="isInEdit()"  class="btn btn-danger"
+                  style="margin-right:5px" type="button" (click)="onDelete()"
+          >Delete
+          </button>
+          <button [disabled]="ingredientAmount.invalid && ingredientName.invalid"
+                  class="btn btn-primary" type="button" (click)="onReset()">
+            Clear
+          </button>
         </div>
       </div>
     </form>
