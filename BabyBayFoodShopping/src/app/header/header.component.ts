@@ -1,5 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
+import {DataHandlingService} from "../shared/data-handling.service";
+import {AuthService} from "../auth/auth.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-header',
@@ -9,10 +12,16 @@ import {ActivatedRoute, Router} from "@angular/router";
 
 })
 export class HeaderComponent implements OnInit {
-  constructor(private router: Router, private route: ActivatedRoute) {
+  isAuthenticated = false;
+  userSub: Subscription;
+
+  constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute, private dataHandlingService: DataHandlingService) {
   }
 
   ngOnInit(): void {
+    this.userSub = this.authService.user.subscribe((user) => {
+      this.isAuthenticated = !!user;
+    })
   }
 
   collapsed = true;
@@ -21,8 +30,15 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['recipes'], {relativeTo: this.route})
   }
 
-  shoppingClicked() {
-    this.router.navigate(['shopping-list'], {relativeTo: this.route})
+  onSaveData() {
+    this.dataHandlingService.storeRecipes();
   }
 
+  onFetchData() {
+    this.dataHandlingService.fetchRecipe().subscribe();
+  }
+
+  onLogout() {
+    this.authService.logout();
+  }
 }
