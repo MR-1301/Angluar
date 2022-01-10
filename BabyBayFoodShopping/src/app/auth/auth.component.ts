@@ -1,8 +1,11 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {AuthResponseData, AuthService} from "./auth.service";
-import {Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
+
+import {AlertComponent} from "../shared/alert/alert.component";
+import {PlaceholderDirective} from "../shared/placeholder/placeholder.directive";
 
 @Component({
   selector: 'app-auth',
@@ -13,13 +16,15 @@ import {ActivatedRoute, Router} from "@angular/router";
     }`
   ]
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
   isLogin = true;
   isLoading = false;
-  @ViewChild('authData') authData: NgForm;
+  @ViewChild('authData', {static: false}) authData: NgForm;
   error = null;
+  closeSub: Subscription;
+  @ViewChild(PlaceholderDirective, {static: false}) alertHost;
 
-  constructor(private authService: AuthService, private router: Router, route: ActivatedRoute) {
+  constructor(private authService: AuthService, private router: Router, route: ActivatedRoute, private componentFactoryResolver: ComponentFactoryResolver) {
   }
 
   ngOnInit(): void {
@@ -33,7 +38,6 @@ export class AuthComponent implements OnInit {
     if (this.authData.invalid)
       return;
 
-    console.log(this.authData)
     const email = this.authData.value.email;
     const password = this.authData.value.password;
 
@@ -52,14 +56,30 @@ export class AuthComponent implements OnInit {
     }
 
     authObs.subscribe((responseData) => {
-      console.log(responseData)
       this.isLoading = false;
       this.router.navigate(['/recipes']);
     }, errorRes => {
       this.isLoading = false
-      console.log(errorRes)
+      this.showErrorAlert(errorRes);
       this.error = errorRes;
     })
     this.authData.reset();
+  }
+
+  private showErrorAlert(message: string) {
+    const alertComponentFactory = this.componentFactoryResolver.resolveComponentFactory(AlertComponent)
+    const hostViewContainer = this.alertHost.viewContainerRef;
+    hostViewContainer.clear();
+    let alertCompRef = hostViewContainer.createComponent(alertComponentFactory);
+    alertCompRef.instance.message = message;
+    this.closeSub = alertCompRef.instance.closeEvent.subscribe(() => {
+      hostViewContainer.clear();
+      this.closeSub.unsubscribe();
+    })
+  }
+
+  ngOnDestroy() {
+    if (this.closeSub)
+      this.closeSub.unsubscribe();
   }
 }

@@ -4,9 +4,17 @@
       <app-loading-spinner></app-loading-spinner>
     </div>
 
-    <div class="alert alert-danger" *ngIf="error">
-      <p>{{error}}</p>
-    </div>
+    <!--    <div class="alert alert-danger" *ngIf="error">-->
+    <!--      <p>{{error}}</p>-->
+    <!--    </div>-->
+
+    <!--    <app-alert-->
+    <!--      [message]="error"-->
+    <!--      *ngIf="error"-->
+    <!--      (closeEvent)="error=null"-->
+    <!--    ></app-alert>-->
+
+    <ng-template appPlaceholder></ng-template>
     <form #authData="ngForm" (ngSubmit)="onSubmit()" *ngIf="!isLoading">
       <div class="form-group">
         <label for="email">Email: </label>
@@ -22,7 +30,7 @@
         </button>
         |
         <button class="btn btn-primary" type="button" (click)="onSwitchMode()">
-          Swith to {{isLogin ? "SignUp" : "Login"}}
+          Switch to {{isLogin ? "SignUp" : "Login"}}
         </button>
       </div>
     </form>

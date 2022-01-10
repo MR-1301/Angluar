@@ -4,6 +4,7 @@ import {BehaviorSubject, throwError} from "rxjs";
 import {catchError, tap} from "rxjs/operators";
 import {User} from "./user.model";
 import {Router} from "@angular/router";
+import {environment} from "../../environments/environment";
 
 export interface AuthResponseData {
   idToken: string;
@@ -17,8 +18,8 @@ export interface AuthResponseData {
 @Injectable({providedIn: 'root'})
 
 export class AuthService {
-  signUpUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCANcm-o6KPceo8rqJo57sYr4vdZw6QZOQ';
-  loginUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCANcm-o6KPceo8rqJo57sYr4vdZw6QZOQ'
+  signUpUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + environment.apiKey;
+  loginUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + environment.apiKey
 
   user = new BehaviorSubject<User>(null);
   loTimer: any = null;
@@ -72,11 +73,11 @@ export class AuthService {
     if (!userData)
       return;
 
-    const expDate = new Date(+userData._tokenExpirationDate);
+    const expDate = new Date(userData._tokenExpirationDate);
     const newUserData = new User(userData.email, userData.id, userData._token, expDate);
 
     if (newUserData.token) {
-      const dur = expDate.getTime() - new Date().getTime();
+      const dur = expDate.getTime() - (new Date()).getTime();
       this.autoLogout(dur);
       this.user.next(newUserData);
     }
@@ -112,7 +113,9 @@ export class AuthService {
   }
 
   autoLogout(expirationDuration: number) {
+    console.log(expirationDuration)
     this.loTimer = setTimeout(() => {
+      console.log("auto Logout!!")
       this.logout();
     }, expirationDuration)
   }
