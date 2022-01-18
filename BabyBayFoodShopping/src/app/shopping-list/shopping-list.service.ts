@@ -1,6 +1,5 @@
 import {Ingredient} from "../shared/ingredient.model";
 import {Subject} from "rxjs";
-import {Output} from "@angular/core";
 
 export class ShoppingListService {
   private ingredients: Ingredient[] = [];

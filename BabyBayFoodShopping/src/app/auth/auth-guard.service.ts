@@ -10,30 +10,38 @@ import {Observable} from 'rxjs';
 import {map, tap, take} from 'rxjs/operators';
 
 import {AuthService} from './auth.service';
+import {Store} from "@ngrx/store";
+import * as fromApp from '../store/app.reducer'
 
 @Injectable({providedIn: 'root'})
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router, private store: Store<fromApp.AppState>) {
   }
-
-  // canLoad(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-  //   return this.authService.user.pipe(
-  //     take(1),
-  //     map(user => {
-  //       const isAuth = !!user;
-  //       if (isAuth) {
-  //         return true;
-  //       }
-  //       return this.router.createUrlTree(['/auth']);
-  //     }))
-  // }
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean | UrlTree | Promise<boolean | UrlTree> | Observable<boolean | UrlTree> {
-    return this.authService.user.pipe(
+
+    //ChangesStoreStarts
+    // return this.authService.user.pipe(
+    //   take(1),
+    //   map(user => {
+    //     const isAuth = !!user;
+    //     if (isAuth) {
+    //       return true;
+    //     }
+    //     return this.router.createUrlTree(['/auth']);
+    //   })
+    // );
+    //ChangesStoreEnds
+
+    //StoreCodeStarts
+    return this.store.select('auth').pipe(
       take(1),
+      map((authState) => {
+        return authState.user;
+      }),
       map(user => {
         const isAuth = !!user;
         if (isAuth) {
@@ -41,11 +49,7 @@ export class AuthGuard implements CanActivate {
         }
         return this.router.createUrlTree(['/auth']);
       })
-      // tap(isAuth => {
-      //   if (!isAuth) {
-      //     this.router.navigate(['/auth']);
-      //   }
-      // })
     );
+    //StoreCodeEnds
   }
 }
